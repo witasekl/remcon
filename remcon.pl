@@ -35,8 +35,14 @@ $VERSION = '0.10';
     license     => 'GNU GPLv3',
 );
 
+use constant {
+    STATUS_INITIAL => 0,
+    STATUS_STARTED => 1,
+    STATUS_STOPPED => 2,
+};
+
 my $event_privmsg_ref = \&event_privmsg; 
-my $started;
+my $status;
 my $last_target;
 my $listen_root;
 my @awaylog;
@@ -207,31 +213,31 @@ sub event_privmsg {
 sub remcon_start {
     my ($data, $server, $channel) = @_;
 
-    if ($started) {
+    if ($status == STATUS_STARTED) {
         print "Remcon already started!";
     }
-    elsif (!defined($started) && !nick_exists($server, Irssi::settings_get_str('remcon_admin'))) {
+    elsif (($status == STATUS_INITIAL) && !nick_exists($server, Irssi::settings_get_str('remcon_admin'))) {
         print "Nick '" . Irssi::settings_get_str('remcon_admin') . "' wasn't found. Check 'remcon_admin' settings.";
     }
     else {
-        print "Remcon started successfully.";
-        $started = 1;
-        @awaylog = ();
         Irssi::signal_add("event privmsg", $event_privmsg_ref);
+        $status = STATUS_STARTED;
+        @awaylog = ();
+        print "Remcon started successfully.";
     }
 }
 
 sub remcon_stop {
-    if (!$started) {
+    if ($status != STATUS_STARTED) {
         print "Remcon wasn't started yet!";
     }
     else {
-        print "Remcon stopped successfully.";
-        $started = 0;
+        Irssi::signal_remove("event privmsg", $event_privmsg_ref);
+        $status = STATUS_STOPPED;
         $last_target = "";
         $listen_root = 0;
         @awaylog = ();
-        Irssi::signal_remove("event privmsg", $event_privmsg_ref);
+        print "Remcon stopped successfully.";
     }
 }
 
