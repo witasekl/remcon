@@ -217,7 +217,7 @@ sub remcon_start {
         print "Remcon already started!";
     }
     elsif (($status == STATUS_INITIAL) && !nick_exists($server, Irssi::settings_get_str('remcon_admin'))) {
-        print "Nick '" . Irssi::settings_get_str('remcon_admin') . "' wasn't found. Check 'remcon_admin' settings.";
+        print "Nick '" . Irssi::settings_get_str('remcon_admin') . "' wasn't found. Check 'remcon_admin' setting.";
     }
     else {
         Irssi::signal_add("event privmsg", $event_privmsg_ref);
