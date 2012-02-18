@@ -16,7 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# Read the README file for info, how to use the script.
+# Read the README.md file for info, how to use the script.
+
+# The latest version can be downloaded from the project page:
+# https://github.com/witasekl/remcon
 
 
 use strict;
@@ -174,7 +177,7 @@ sub process_control_message {
     elsif ($text =~ /^!/) {
         $server->send_message(Irssi::settings_get_str('remcon_admin'), "Unknown command: $text.", 1);
     }
-    elsif ($text =~ s/^([^ ]+): *(.*)$/\1 \2/) {
+    elsif ($text =~ s/^([^ :]+): *(.*)$/\1 \2/) {
         my ($target, $message) = split(" ", $text, 2);
         send_message($server, $target, $message);
     }
