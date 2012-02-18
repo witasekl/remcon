@@ -62,7 +62,8 @@ sub get_nicklist {
 
     my $channel = $server->channel_find($remcon_channel);
     if ($channel) {
-        my @sorted_nicks = sort {lc($a->{'nick'}) cmp lc($b->{'nick'})} $channel->nicks();
+        my @sorted_nicks = sort {lc($a->{'nick'}) cmp lc($b->{'nick'})}
+            $channel->nicks();
         foreach my $nick (@sorted_nicks) {
             if (!$nick->{'op'}) {
                 if ($nick->{'voice'}) {
@@ -106,7 +107,8 @@ sub send_message {
             $target = $last_target;
         }
         else {
-            $server->send_message($remcon_admin, "You must specify target nick!", 1);
+            $server->send_message($remcon_admin,
+                "You must specify target nick!", 1);
             return;
         }
     }
@@ -117,13 +119,15 @@ sub send_message {
         if ($target eq $remcon_root) {
             $server->send_message($remcon_channel, $message, 0);
             if (!$listen_root) {
-                $server->send_message($remcon_admin, "Warning: You don't listen, what root says.", 1);
+                $server->send_message($remcon_admin,
+                    "Warning: You don't listen, what root says.", 1);
             }
         }
         else {
             $server->command("msg $target $message");
         }
-        $server->send_message($remcon_admin, "Message was sent to $target.", 1);
+        $server->send_message($remcon_admin, "Message was sent to $target.",
+            1);
     }
     else {
         $server->send_message($remcon_admin, "Nick $target doesn't exist.", 1);
@@ -132,7 +136,8 @@ sub send_message {
 
 sub print_help {
     my ($server, $target) = @_;
-    my @help = ("Commands: !blist, !away [msg], !listen <on|off>, !awaylog [count], !help", "Message sending: [nick:] <msg>");
+    my @help = ("Commands: !blist, !away [msg], !listen <on|off>, " .
+        "!awaylog [count], !help", "Message sending: [nick:] <msg>");
 
     print_list($server, $target, @help);
 }
@@ -143,7 +148,8 @@ sub print_awaylog {
     my @output = ();
  
     if ($awaylog_size) {
-        for (my $i = 0; $i < (($awaylog_size < $items) ? $awaylog_size : $items); $i++) {
+        my $min = ($awaylog_size < $items) ? $awaylog_size : $items;
+        for (my $i = 0; $i < $min; $i++) {
             push(@output, pop(@awaylog));
         }
         print_list($server, $remcon_admin, @output);
@@ -240,8 +246,10 @@ sub remcon_start {
     if ($status == STATUS_STARTED) {
         print "Remcon already started!";
     }
-    elsif (($status == STATUS_INITIAL) && !nick_exists($server, $remcon_admin)) {
-        print "Nick '" . $remcon_admin . "' wasn't found. Check 'remcon_admin' setting.";
+    elsif (($status == STATUS_INITIAL) && !nick_exists($server, $remcon_admin))
+    {
+        print "Nick '" . $remcon_admin .
+            "' wasn't found. Check 'remcon_admin' setting.";
     }
     else {
         Irssi::signal_add("event privmsg", $event_privmsg_ref);
