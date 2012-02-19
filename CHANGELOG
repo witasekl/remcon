@@ -1,0 +1,4 @@
+Version 0.20:
+
+ - Auto-away functionality (added remcon_autoaway_msg setting).
+ - Minor bugfixes and code refinement.
