@@ -75,3 +75,17 @@ The script can be customized by the settings described in the next section.
  - remcon_channel - Defines the IRC channel. Default value is '&bitlbee'.
 
  - remcon_root - Defines the root Bitlbee IRC user. Default value is 'root'.
+
+ - remcon_autoaway_msg - Defines the away message, which is used if the remcon
+   admin user is disconnected. If it's empty string, the auto-away
+   functionality is disabled. Default value is ''.
+
+*Note: Settings are loaded after the Remcon is started. So if you would like to
+change some setting value(s) while the Remcon is running, you will have to stop
+it:*
+
+    /remcon stop
+
+*and then start again:*
+
+    /remcon start
