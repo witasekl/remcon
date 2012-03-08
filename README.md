@@ -80,6 +80,12 @@ The script can be customized by the settings described in the next section.
    admin user is disconnected. If it's empty string, the auto-away
    functionality is disabled. Default value is ''.
 
+ - remcon_detect_attached_screen - If it's enabled, the script will try detect,
+   if Irssi runs in GNU Screen and if the Screen session is attached. If yes,
+   then the script won't redirect messages to the remcon admin user and also
+   the 'remcon_autoaway_msg' will be temporarily disabled. Default value is
+   'ON'.
+
 *Note: Settings are loaded after the Remcon is started. So if you would like to
 change some setting value(s) while the Remcon is running, you will have to stop
 it:*
@@ -89,3 +95,8 @@ it:*
 *and then start again:*
 
     /remcon start
+
+*or simple restart it:*
+
+    /remcon restart
+

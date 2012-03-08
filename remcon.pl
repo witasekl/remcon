@@ -319,6 +319,13 @@ sub remcon_stop {
     }
 }
 
+sub remcon_restart {
+    my ($data, $server, $channel) = @_;
+
+    remcon_stop($data, $server, $channel);
+    remcon_start($data, $server, $channel);
+}
+
 Irssi::command_bind 'remcon' => sub {
     my ($data, $server, $item) = @_;
     $data =~ s/\s+$//g;
@@ -327,6 +334,7 @@ Irssi::command_bind 'remcon' => sub {
 
 Irssi::command_bind('remcon start', \&remcon_start);
 Irssi::command_bind('remcon stop', \&remcon_stop);
+Irssi::command_bind('remcon restart', \&remcon_restart);
 
 Irssi::settings_add_str('remcon', 'remcon_admin', 'remcon');
 Irssi::settings_add_str('remcon', 'remcon_channel', '&bitlbee');
