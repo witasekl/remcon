@@ -1,3 +1,9 @@
+Version 0.30:
+
+ - Restart command.
+ - Detection of attached GNU Screen (added remcon_detect_attached_screen
+   setting).
+
 Version 0.20:
 
  - Auto-away functionality (added remcon_autoaway_msg setting).
