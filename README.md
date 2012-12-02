@@ -56,7 +56,7 @@ able to use the following commands for controlling the Irssi and Bitlbee:
    away-log. By default it returns 3 messages.
 
  - !watch-users [user_1] ... [user_n] - Defines a list of watched users. If
-   some of the users logs in, the script will inform you about it.
+   some of the users logs in, the script will inform you about that.
 
  - !watched-users - Returns a list of watched users.
 
