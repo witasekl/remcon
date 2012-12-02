@@ -45,11 +45,13 @@ use constant {
 };
 
 my $event_privmsg_ref = \&event_privmsg; 
+my $nicklist_new_ref = \&nicklist_new;
 my $nicklist_remove_ref = \&nicklist_remove;
 my $socket = screen_socket_path();
 my $status;
 my $last_target;
 my $listen_root;
+my $watched_users;
 my $remcon_admin;
 my $remcon_channel;
 my $remcon_root;
@@ -176,7 +178,8 @@ sub send_message {
 sub print_help {
     my ($server, $target) = @_;
     my @help = ("Commands: !blist, !away [msg], !listen <on|off>, " .
-        "!awaylog [count], !help", "Message sending: [nick:] <msg>");
+        "!awaylog [count], !watch-users [nick_1] ... [nick_n], " .
+        "!watched-users, !help", "Message sending: [nick:] <msg>");
 
     print_list($server, $target, @help);
 }
@@ -210,6 +213,9 @@ sub process_control_message {
     elsif ($text eq "!help") {
         print_help($server, $nick);
     }
+    elsif ($text eq "!watched-users") {
+        $server->send_message($remcon_admin, "Watched users: " . "$watched_users", 1);
+    }
     elsif ($text =~ s/^!away( .*|)$/\1/) {
         $server->command("away$text");
     }
@@ -223,6 +229,9 @@ sub process_control_message {
     }
     elsif ($text =~ s/^!awaylog( [1-9]|)$/\1/) {
         print_awaylog($server, ($text ? $text : 3));
+    }
+    elsif ($text =~ s/^!watch-users( .*|)$/\1/) {
+        $watched_users = $text;
     }
     elsif ($text =~ /^!/) {
         $server->send_message($remcon_admin, "Unknown command: $text.", 1);
@@ -264,6 +273,20 @@ sub event_privmsg {
     }
 }
 
+sub nicklist_new {
+    my ($channel, $nick) = @_;
+
+    if ($watched_users) {
+        my $nickname = $nick->{'nick'};
+        if ($watched_users =~ /$nickname/) {
+            foreach my $server (Irssi::servers()) {
+                $server->send_message($remcon_admin, "User '" .
+                    $nickname . "' logged in.", 1);
+            }
+        }
+    }
+}
+
 sub nicklist_remove {
     my ($channel, $nick) = @_;
 
@@ -297,6 +320,7 @@ sub remcon_start {
     }
     else {
         Irssi::signal_add("event privmsg", $event_privmsg_ref);
+        Irssi::signal_add("nicklist new", $nicklist_new_ref);
         Irssi::signal_add("nicklist remove", $nicklist_remove_ref);
         $status = STATUS_STARTED;
         @awaylog = ();
@@ -310,10 +334,12 @@ sub remcon_stop {
     }
     else {
         Irssi::signal_remove("event privmsg", $event_privmsg_ref);
+        Irssi::signal_remove("nicklist new", $nicklist_new_ref);
         Irssi::signal_remove("nicklist remove", $nicklist_remove_ref);
         $status = STATUS_STOPPED;
         $last_target = "";
         $listen_root = 0;
+        $watched_users = "";
         @awaylog = ();
         print "Remcon stopped successfully.";
     }
