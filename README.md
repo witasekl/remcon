@@ -34,7 +34,7 @@ able to use the following commands for controlling the Irssi and Bitlbee:
 
  - !blist - Returns two lines containing buddy list. The first line (starting
    with symbol '+') contains all nicknames with 'online' status. The second
-   line(starting with symbol '-') contains the rest of nicknames, which aren't
+   line (starting with symbol '-') contains the rest of nicknames, which aren't
    'offline' (i.e. 'away', etc...).
 
  - !away [msg] - Switches to the 'away' status with the message 'msg. If the
@@ -54,6 +54,11 @@ able to use the following commands for controlling the Irssi and Bitlbee:
    'remcon_admin' user had been offline). Value 'count' (it can be 1 - 9)
    specifies the number of messages, which should be returned from the
    away-log. By default it returns 3 messages.
+
+ - !watch-users [user_1] ... [user_n] - Defines a list of watched users. If
+   some of the users logs in, the script will inform you about it.
+
+ - !watched-users - Returns a list of watched users.
 
    *Note: Don't mix up the away-log with the Irssi away.log file.*
 
