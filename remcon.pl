@@ -280,8 +280,10 @@ sub nicklist_new {
         my $nickname = $nick->{'nick'};
         if ($watched_users =~ /$nickname/) {
             foreach my $server (Irssi::servers()) {
-                $server->send_message($remcon_admin, "User '" .
-                    $nickname . "' logged in.", 1);
+                if (nick_exists($server, $remcon_admin)) {
+                    $server->send_message($remcon_admin, "User '" .
+                        $nickname . "' has logged in.", 1);
+                }
             }
         }
     }
