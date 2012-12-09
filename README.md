@@ -55,12 +55,13 @@ able to use the following commands for controlling the Irssi and Bitlbee:
    specifies the number of messages, which should be returned from the
    away-log. By default it returns 3 messages.
 
+   *Note: Don't mix up the away-log with the Irssi away.log file.*
+
  - !watch-users [user_1] ... [user_n] - Defines a list of watched users. If
-   some of the users logs in, the script will inform you about that.
+   some of the users listed there logs in, the script will inform you about
+   that.
 
  - !watched-users - Returns a list of watched users.
-
-   *Note: Don't mix up the away-log with the Irssi away.log file.*
 
  - !help - Returns short help message.
 
@@ -85,11 +86,11 @@ The script can be customized by the settings described in the next section.
    admin user is disconnected. If it's empty string, the auto-away
    functionality is disabled. Default value is ''.
 
- - remcon_detect_attached_screen - If it's enabled, the script will try detect,
-   if Irssi runs in GNU Screen and if the Screen session is attached. If yes,
-   then the script won't redirect messages to the remcon admin user and also
-   the 'remcon_autoaway_msg' will be temporarily disabled. Default value is
-   'ON'.
+ - remcon_detect_attached_screen - If it's enabled, the script will try to
+   detect, if Irssi runs in GNU Screen and if the Screen session is attached.
+   If yes, then the script won't redirect messages to the remcon admin user and
+   also the 'remcon_autoaway_msg' will be temporarily disabled. Default value
+   is 'ON'.
 
 *Note: Settings are loaded after the Remcon is started. So if you would like to
 change some setting value(s) while the Remcon is running, you will have to stop
